@@ -5,14 +5,21 @@
 #include <filesystem>
 
 #include "kno/find_object.h"
+#include "options.h"
 
-int main(int argc [[maybe_unused]], char* argv[] [[maybe_unused]])
+int main(int argc, char* argv[])
 {
+    Options options;
+
+    if (!options.parse(argc, argv)) {
+        return EXIT_FAILURE;
+    }
+
     std::vector<std::string> query {"the_universe", "is_instance_of", "universe"};
 
     for (auto const& obj_name : query) {
         printf("find object: %s\n", obj_name.c_str());
-        std::filesystem::path kb("../knots/kb");
+        std::filesystem::path kb(options.search_path);
 
         auto obj_path = kno::find_object(obj_name, kb);
         if (obj_path.empty()) {
