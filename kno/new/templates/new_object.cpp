@@ -1,0 +1,3 @@
+R"(#include "{{name}}.h"
+
+)"

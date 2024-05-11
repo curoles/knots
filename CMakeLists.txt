@@ -29,8 +29,9 @@ include_directories(.)
 include_directories(${PROJECT_SOURCE_DIR}/third-party)
 
 include(third-party/cli11.cmake)
+include(third-party/inja.cmake)
+include(third-party/json.cmake)
 #include(third-party/rapidyaml.cmake)
 #include(third-party/termcolor.cmake)
-#include(third-party/inja.cmake)
 
 add_subdirectory(kno)

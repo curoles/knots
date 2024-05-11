@@ -4,21 +4,21 @@
 
 bool Options::parse(int argc, char** argv)
 {
-    CLI::App app{"Evaluate KNOTS expression"};
+    CLI::App app{"Create new KNOT"};
 
-    this->search_path = "NO SEARCH PATH PROVIDED";
+    this->output_path = "NO OUTPUT PATH PROVIDED";
 
     app.add_flag("-v,--verbose", this->verbose, "verbose output");
 
     //app.add_option("-l,--log", this->log_file, "log file")->
     //    each([this](const std::string &){this->is_log_enabled = true;});
 
-    app.add_option("search_path", this->search_path, "objects search path")
+    app.add_option("-o,--output-path", this->output_path, "generated files location")
         ->required()
         ->check(CLI::ExistingPath);
 
-    // Positional option, directory with compiled objects
-    app.add_option("output_path", this->output_path, "compiled objects location")
+    // Positional option, object name
+    app.add_option("object_name", this->object_name, "object_name")
         ->required();
 
     try

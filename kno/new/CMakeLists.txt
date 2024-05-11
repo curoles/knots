@@ -1,9 +1,8 @@
 set(SOURCES
     main.cpp
     options.cpp
-    ../find_object.cpp
 )
 
-add_executable(kno-evaluate
+add_executable(kno-new
     ${SOURCES}
 )
