@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
             return EXIT_FAILURE;
         }
 
-        auto obj_bin_path = kno::build_object(obj_name, obj_path);
+        auto obj_bin_path = kno::build_object(obj_name, obj_path, options.output_path);
     }
 
     return EXIT_SUCCESS;

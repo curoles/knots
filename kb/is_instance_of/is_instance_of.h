@@ -1,5 +1,7 @@
 #pragma once
 
+#include "kno/object/kno_object.h"
+
 namespace kno::is_instance_of {
 
 class Object : public kno::Object

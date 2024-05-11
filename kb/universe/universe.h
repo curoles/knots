@@ -1,11 +1,11 @@
-R"(#pragma once
+#pragma once
 
 #include "kno/object/kno_object.h"
 
-namespace kno::{{name}} {
+namespace kno::universe {
 
 class Object : public kno::Object
 {
 };
 
-})"
+}

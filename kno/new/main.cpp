@@ -79,6 +79,7 @@ static int generate_files(Options const& options)
 
     json data;
     data["name"] = options.object_name;
+    data["kno_prj_dir"] = fs::absolute(options.kno_prj_dir);
 
     for (auto const& template_args : templates) {
         if (generate_file(template_args, output_dir, data) != EXIT_SUCCESS) {

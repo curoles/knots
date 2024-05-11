@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace kno {
 
 class Object
@@ -15,7 +17,7 @@ public:
         return name_;
     }
 
-}
+};
 
 
 } // namaspace kno

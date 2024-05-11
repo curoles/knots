@@ -16,7 +16,9 @@ find_object(std::string const& obj_name, std::filesystem::path const& search_pat
  *
  */
 std::filesystem::path
-build_object(std::string const& obj_name, std::filesystem::path const& obj_path);
+build_object(std::string const& obj_name,
+    std::filesystem::path const& obj_path,
+    std::filesystem::path const& output_path);
 
 /** Execute shell command.
  *

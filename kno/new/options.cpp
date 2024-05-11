@@ -17,6 +17,10 @@ bool Options::parse(int argc, char** argv)
         ->required()
         ->check(CLI::ExistingPath);
 
+    app.add_option("-p,--prj-path", this->kno_prj_dir, "main project path")
+        ->required()
+        ->check(CLI::ExistingPath);
+
     // Positional option, object name
     app.add_option("object_name", this->object_name, "object_name")
         ->required();

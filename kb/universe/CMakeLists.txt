@@ -1,6 +1,6 @@
-R"(cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.22)
 
-project({{name}}
+project(universe
     LANGUAGES CXX
 )
 
@@ -15,9 +15,8 @@ set(C_OPT_FLAGS   "-march=native -ftree-vectorize")
 set(CMAKE_CXX_FLAGS  "-O3 ${C_WARN_FLAGS} ${C_OPT_FLAGS} ${C_BUILD_FLAGS}")
 
 include_directories(.)
-include_directories({{kno_prj_dir}})
+include_directories(/home/lesikigor/prj/knots/build/../knots)
 
-add_library(kb_{{name}} SHARED
-    {{name}}.cpp
+add_library(kb_universe SHARED
+    universe.cpp
 )
-)"

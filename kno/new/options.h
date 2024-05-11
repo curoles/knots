@@ -11,6 +11,7 @@ struct Options
 
     std::string object_name;  ///< name of the new Object
     std::string output_path;  ///< location to store generated Object text files
+    std::string kno_prj_dir;  ///< path to main project
 
     //bool is_log_enabled{false};
     //std::string log_file{"assembler.log"};

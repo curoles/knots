@@ -22,13 +22,37 @@ kno::find_object(std::string const& obj_name, std::filesystem::path const& searc
  *
  */
 std::filesystem::path
-kno::build_object(std::string const& obj_name [[maybe_unused]], std::filesystem::path const& obj_path [[maybe_unused]])
+kno::build_object(
+    std::string const& obj_name,
+    std::filesystem::path const& obj_path,
+    std::filesystem::path const& output_path
+)
 {
     std::filesystem::path bin_path;
     std::string cmd_output;
 
-    execute_shell_cmd("ls", cmd_output);
-    //printf("output: %s\n", cmd_output.c_str());
+    std::filesystem::path out_dir(output_path / obj_name);
+
+    std::string cmake_cmd("cmake -G \"Unix Makefiles\"");
+    cmake_cmd += " -B "; cmake_cmd += out_dir;
+    cmake_cmd += " -S "; cmake_cmd += obj_path;
+
+    int result = execute_shell_cmd(cmake_cmd, cmd_output);
+    if (result != 0) {
+        printf("CMake output:\n%s\n", cmd_output.c_str());
+        return bin_path;
+    }
+
+    std::string make_cmd("make -C ");
+    make_cmd += out_dir;
+
+    result = execute_shell_cmd(make_cmd, cmd_output);
+    if (result != 0) {
+        printf("Make output:\n%s\n", cmd_output.c_str());
+        return bin_path;
+    }
+
+    bin_path = out_dir / (std::string("libkb_") + obj_name + ".so");
 
     return bin_path;
 }
