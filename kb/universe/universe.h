@@ -6,6 +6,9 @@ namespace kno::universe {
 
 class Object : public kno::Object
 {
+public:
+    Object();
+    ~Object();
 };
 
 }

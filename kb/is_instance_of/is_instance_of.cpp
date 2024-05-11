@@ -1,5 +1,28 @@
 #include "is_instance_of.h"
 
+kno::is_instance_of::Object::
+Object():kno::Object("is_instance_of")
+{
+}
+
+kno::is_instance_of::Object::
+~Object()
+{
+}
+
+extern "C"
+void* kno_create(void)
+{
+    return new kno::is_instance_of::Object;
+}
+
+extern "C"
+void kno_destroy(void* object_ptr)
+{
+    kno::is_instance_of::Object* object = reinterpret_cast<kno::is_instance_of::Object*>(object_ptr);
+    delete object;
+}
+
 bool
 kno::is_instance_of::Object::
 operator()(kno::Object const* type [[maybe_unused]], kno::Object const* instance [[maybe_unused]]) const

@@ -1,5 +1,7 @@
 #include "find_object.h"
 
+#include <dlfcn.h>
+
 /** Return path to the Object or empty path if not found.
  *
  */
@@ -33,26 +35,31 @@ kno::build_object(
 
     std::filesystem::path out_dir(output_path / obj_name);
 
-    std::string cmake_cmd("cmake -G \"Unix Makefiles\"");
-    cmake_cmd += " -B "; cmake_cmd += out_dir;
-    cmake_cmd += " -S "; cmake_cmd += obj_path;
+    bin_path = out_dir / (std::string("libkb_") + obj_name + ".so");
 
-    int result = execute_shell_cmd(cmake_cmd, cmd_output);
-    if (result != 0) {
-        printf("CMake output:\n%s\n", cmd_output.c_str());
-        return bin_path;
+    // Do NOT run cmake if .so exists, running make is enough.
+    if (!std::filesystem::exists(bin_path)) {
+        std::string cmake_cmd("cmake -G \"Unix Makefiles\"");
+        cmake_cmd += " -B "; cmake_cmd += out_dir;
+        cmake_cmd += " -S "; cmake_cmd += obj_path;
+
+        int result = execute_shell_cmd(cmake_cmd, cmd_output);
+        if (result != 0) {
+            printf("CMake output:\n%s\n", cmd_output.c_str());
+            bin_path.clear();
+            return bin_path;
+        }
     }
 
     std::string make_cmd("make -C ");
     make_cmd += out_dir;
 
-    result = execute_shell_cmd(make_cmd, cmd_output);
+    int result = execute_shell_cmd(make_cmd, cmd_output);
     if (result != 0) {
         printf("Make output:\n%s\n", cmd_output.c_str());
+        bin_path.clear();
         return bin_path;
     }
-
-    bin_path = out_dir / (std::string("libkb_") + obj_name + ".so");
 
     return bin_path;
 }
@@ -87,3 +94,39 @@ kno::execute_shell_cmd(std::string const& cmd, std::string& output)
     return process_exit_status;
 }
 
+[[nodiscard]] kno::dlhandle
+kno::load_object(std::filesystem::path const& path_to_dl)
+{
+    kno::dlhandle handle = dlopen(path_to_dl.c_str(), RTLD_NOW | RTLD_LOCAL);
+    if (!handle) {
+        fprintf(stderr, "Error: %s\n", dlerror());
+        return nullptr;
+    }
+
+    if (nullptr == dlsym(handle, "kno_create")) {
+        fprintf(stderr, "Error: %s\n", dlerror());
+        dlclose(handle);
+        return nullptr;
+    }
+
+    if (nullptr == dlsym(handle, "kno_destroy")) {
+        fprintf(stderr, "Error: %s\n", dlerror());
+        dlclose(handle);
+        return nullptr;
+    }
+
+    //list_methods
+    //call_mathod
+
+    dlerror(); // Clear any existing error
+
+    return handle;
+}
+
+void
+kno::unload_object(kno::dlhandle handle)
+{
+    if (handle) {
+        dlclose(handle);
+    }
+}

@@ -13,6 +13,8 @@ public:
         name_(std::move(name_))
     {}
 
+    virtual ~Object(){}
+
     std::string const& name() const {
         return name_;
     }

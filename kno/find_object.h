@@ -28,4 +28,13 @@ build_object(std::string const& obj_name,
 int
 execute_shell_cmd(std::string const& cmd, std::string& output);
 
+using dlhandle = void*;
+
+[[nodiscard]] dlhandle
+load_object(std::filesystem::path const& path_to_dl);
+
+void
+unload_object(kno::dlhandle handle);
+
+
 } // namespace kno
