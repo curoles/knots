@@ -27,7 +27,8 @@ std::filesystem::path
 kno::build_object(
     std::string const& obj_name,
     std::filesystem::path const& obj_path,
-    std::filesystem::path const& output_path
+    std::filesystem::path const& output_path,
+    bool rebuild_object
 )
 {
     std::filesystem::path bin_path;
@@ -37,8 +38,14 @@ kno::build_object(
 
     bin_path = out_dir / (std::string("libkb_") + obj_name + ".so");
 
+    bool lib_exists = std::filesystem::exists(bin_path);
+
+    if (!rebuild_object && lib_exists) {
+        return bin_path;
+    }
+
     // Do NOT run cmake if .so exists, running make is enough.
-    if (!std::filesystem::exists(bin_path)) {
+    if (!lib_exists) {
         std::string cmake_cmd("cmake -G \"Unix Makefiles\"");
         cmake_cmd += " -B "; cmake_cmd += out_dir;
         cmake_cmd += " -S "; cmake_cmd += obj_path;
@@ -115,8 +122,11 @@ kno::load_object(std::filesystem::path const& path_to_dl)
         return nullptr;
     }
 
-    //list_methods
-    //call_mathod
+    if (nullptr == dlsym(handle, "kno_query")) {
+        fprintf(stderr, "Error: %s\n", dlerror());
+        dlclose(handle);
+        return nullptr;
+    }
 
     dlerror(); // Clear any existing error
 

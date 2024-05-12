@@ -1,10 +1,9 @@
 #pragma once
 
 #include <string>
-#include "find_object.h"
+#include <vector>
 
-typedef void* (*kno_plugin_object_create_func)(void);
-typedef void (*kno_plugin_object_destroy_func)(void*);
+#include "find_object.h"
 
 namespace kno {
 
@@ -16,18 +15,27 @@ class Plugin final
     kno::Object* object_;
 
 private:
-    typedef void* (*object_create_func_t)(void);
-    typedef void (*object_destroy_func_t)(void*);
+    typedef kno::Object* (*object_create_func_t)(void);
+    typedef void  (*object_destroy_func_t)(kno::Object*);
+    typedef kno::Object* (*object_query_func_t)(kno::Object*);
 
     object_create_func_t object_create_func;
     object_destroy_func_t object_destroy_func;
+    object_query_func_t object_query_func;
 
 public:
     explicit Plugin(kno::dlhandle handle);
     virtual ~Plugin();
 
     kno::Object* get_object() {return object_;}
+
+    //kno::Object* query();
 };
 
+
+using vector_plugins = std::vector<std::unique_ptr<kno::Plugin> >;
+
+void //[[nodiscard]]
+do_query(vector_plugins const& plugins);
 
 } // namespace kno

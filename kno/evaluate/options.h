@@ -11,6 +11,9 @@ struct Options
 
     std::string search_path;  ///< where to search for objects
     std::string output_path;  ///< where to store compiled objects
+    std::string query;
+
+    bool update_objects{false};
 
     // Use only when assembler emits ELF *executable*
     //uint64_t prog_load_addr{0x1000};

@@ -11,15 +11,22 @@ kno::{{name}}::Object::
 }
 
 extern "C"
-void* kno_create(void)
+kno::Object* kno_create(void)
 {
     return new kno::{{name}}::Object;
 }
 
 extern "C"
-void kno_destroy(void* object_ptr)
+void kno_destroy(kno::Object* object_ptr)
 {
-    kno::{{name}}::Object* object = reinterpret_cast<kno::{{name}}::Object*>(object_ptr);
-    delete object;
+    delete object_ptr;
+}
+
+extern "C"
+kno::Object* kno_query(kno::Object* object_ptr)
+{
+    kno::{{name}}::Object* object [[maybe_unused]] =
+        dynamic_cast<kno::{{name}}::Object*>(object_ptr);
+    return nullptr;
 }
 )"

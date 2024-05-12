@@ -8,6 +8,20 @@
 #include "kno/plugin.h"
 #include "options.h"
 
+std::vector<std::string> split_string(std::string s, std::string del = ".")
+{
+    std::vector<std::string> strings;
+    int start, end = -1*del.size();
+    do {
+        start = end + del.size();
+        end = s.find(del, start);
+        strings.push_back(s.substr(start, end - start));
+    } while (end != -1);
+
+    return strings;
+}
+
+
 int main(int argc, char* argv[])
 {
     Options options;
@@ -16,7 +30,7 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    std::vector<std::string> query {"the_universe", "is_instance_of", "universe"};
+    std::vector<std::string> query = split_string(options.query);
     std::vector<std::unique_ptr<kno::Plugin> > plugins;
 
     for (auto const& obj_name : query) {
@@ -29,7 +43,8 @@ int main(int argc, char* argv[])
             return EXIT_FAILURE;
         }
 
-        auto obj_lib_path = kno::build_object(obj_name, obj_path, options.output_path);
+        auto obj_lib_path = kno::build_object(obj_name,
+            obj_path, options.output_path, options.update_objects);
 
         if (!obj_lib_path.empty()) {
             auto handle = kno::load_object(obj_lib_path);
@@ -38,6 +53,11 @@ int main(int argc, char* argv[])
             }
             plugins.push_back(std::move(std::make_unique<kno::Plugin>(handle)));
         }
+    }
+
+    if (plugins.size() > 0) {
+        //unique_ptr<kno::Object>
+        kno::do_query(plugins);
     }
 
     // Delete objects and unload .so libs.
