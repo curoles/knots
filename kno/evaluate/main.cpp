@@ -6,6 +6,8 @@
 
 #include "kno/find_object.h"
 #include "kno/plugin.h"
+#include "kno/object/kno_object.h"
+
 #include "options.h"
 
 std::vector<std::string> split_string(std::string s, std::string del = ".")
@@ -33,6 +35,8 @@ int main(int argc, char* argv[])
     std::vector<std::string> query = split_string(options.query);
     std::vector<std::unique_ptr<kno::Plugin> > plugins;
 
+    kno::Object* prev = nullptr;
+
     for (auto const& obj_name : query) {
         printf("find object: %s\n", obj_name.c_str());
         std::filesystem::path kb(options.search_path);
@@ -52,12 +56,17 @@ int main(int argc, char* argv[])
                 return EXIT_FAILURE;
             }
             plugins.push_back(std::move(std::make_unique<kno::Plugin>(handle)));
+            kno::Object* this_object = plugins.back()->get_object();
+            if (prev) {
+                prev->set_list_next(this_object);
+            }
+            prev = this_object;
         }
     }
 
     if (plugins.size() > 0) {
-        //unique_ptr<kno::Object>
-        kno::do_query(plugins);
+        kno::Object* result = kno::do_query(plugins);
+        kno::objects_list_delete(result);
     }
 
     // Delete objects and unload .so libs.

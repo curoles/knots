@@ -10,7 +10,7 @@ public:
     Object();
     ~Object();
 
-    bool operator()(kno::Object const* type, kno::Object const* instance) const;
+    bool query(kno::Object const* instance, kno::Object const* type) const;
 };
 
 

@@ -2,6 +2,7 @@
 
 #include <dlfcn.h>
 
+#include "kno/object/kno_object.h"
 
 kno::Plugin::
 Plugin(kno::dlhandle handle):lib_(handle)
@@ -10,7 +11,7 @@ Plugin(kno::dlhandle handle):lib_(handle)
     *(void **) (&object_destroy_func) = dlsym(handle, "kno_destroy");
     *(void **) (&object_query_func) = dlsym(handle, "kno_query");
 
-    object_ = reinterpret_cast<kno::Object*>(object_create_func());
+    object_ = object_create_func();
     if (!object_) {
         throw std::string(dlerror());
     }
@@ -23,12 +24,25 @@ kno::Plugin::
     kno::unload_object(lib_);
 }
 
-void //[[nodiscard]]
+[[nodiscard]] kno::Object*
+kno::Plugin::
+query(kno::Object* objects_list)
+{
+    return object_query_func(objects_list);
+}
+
+[[nodiscard]] kno::Object*
 kno::do_query(vector_plugins const& plugins)
 {
     if (plugins.empty()) {
-        return;
+        return nullptr;
     }
 
-    //plugins.at(0).query([1..len]);
+    kno::Object* objects_list = plugins.front()->get_object();
+
+    /*for (kno::Object* current = objects_list; current != nullptr; current = current->get_list_next()) {
+        printf("%s\n", current->name().c_str());
+    }*/
+
+    return plugins.front()->query(objects_list);
 }

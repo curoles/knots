@@ -29,13 +29,13 @@ public:
 
     kno::Object* get_object() {return object_;}
 
-    //kno::Object* query();
+    [[nodiscard]] kno::Object* query(kno::Object*);
 };
 
 
 using vector_plugins = std::vector<std::unique_ptr<kno::Plugin> >;
 
-void //[[nodiscard]]
+[[nodiscard]] kno::Object*
 do_query(vector_plugins const& plugins);
 
 } // namespace kno
