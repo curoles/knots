@@ -1,5 +1,7 @@
 #include "the_universe.h"
 
+#include "kno/plugin.h"
+
 kno::the_universe::Object::
 Object():kno::Object("the_universe")
 {
@@ -23,7 +25,7 @@ void kno_destroy(kno::Object* object_ptr)
 }
 
 extern "C"
-kno::Object* kno_query(kno::Object* object_ptr)
+kno::Plugin* kno_query(kno::Object* object_ptr)
 {
     kno::the_universe::Object* object [[maybe_unused]] =
         dynamic_cast<kno::the_universe::Object*>(object_ptr);

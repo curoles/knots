@@ -65,8 +65,13 @@ int main(int argc, char* argv[])
     }
 
     if (plugins.size() > 0) {
-        kno::Object* result = kno::do_query(plugins);
-        kno::objects_list_delete(result);
+        kno::Plugin* result = kno::do_query(plugins);
+        if (result == nullptr) {
+            fprintf(stderr, "Error: no result returned\n");
+        }
+        else {
+            kno::plugins_list_delete(result);
+        }
     }
 
     // Delete objects and unload .so libs.

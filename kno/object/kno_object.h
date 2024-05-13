@@ -27,6 +27,7 @@ public:
     Object* get_list_next(){return list_next_;}
 };
 
+#if 0
 inline void objects_list_delete(kno::Object* objects_list) {
     kno::Object* next;
     for (kno::Object* current = objects_list; current != nullptr; current = next) {
@@ -35,5 +36,6 @@ inline void objects_list_delete(kno::Object* objects_list) {
         delete current;
     }
 }
+#endif
 
 } // namaspace kno

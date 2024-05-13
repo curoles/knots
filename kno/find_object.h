@@ -16,7 +16,8 @@ find_object(std::string const& obj_name, std::filesystem::path const& search_pat
  *
  */
 std::filesystem::path
-build_object(std::string const& obj_name,
+build_object(
+    std::string const& obj_name,
     std::filesystem::path const& obj_path,
     std::filesystem::path const& output_path,
     bool rebuild_object
@@ -38,5 +39,12 @@ load_object(std::filesystem::path const& path_to_dl);
 void
 unload_object(kno::dlhandle handle);
 
+[[nodiscard]] dlhandle
+find_build_load_object(
+    std::string const& obj_name,
+    std::filesystem::path const& search_path,
+    std::filesystem::path const& output_path,
+    bool rebuild_object
+);
 
 } // namespace kno

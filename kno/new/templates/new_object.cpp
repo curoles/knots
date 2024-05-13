@@ -1,5 +1,7 @@
 R"(#include "{{name}}.h"
 
+#include "kno/plugin.h"
+
 kno::{{name}}::Object::
 Object():kno::Object("{{name}}")
 {
@@ -23,7 +25,7 @@ void kno_destroy(kno::Object* object_ptr)
 }
 
 extern "C"
-kno::Object* kno_query(kno::Object* object_ptr)
+kno::Plugin* kno_query(kno::Object* object_ptr)
 {
     kno::{{name}}::Object* object [[maybe_unused]] =
         dynamic_cast<kno::{{name}}::Object*>(object_ptr);

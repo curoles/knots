@@ -8,3 +8,6 @@ set(SOURCES
 add_executable(kno-evaluate
     ${SOURCES}
 )
+target_link_options(kno-evaluate PUBLIC
+    "-Wl,--export-dynamic-symbol=kno_plugin_make"
+)

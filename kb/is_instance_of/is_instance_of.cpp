@@ -1,5 +1,7 @@
 #include "is_instance_of.h"
 
+#include "kno/plugin.h"
+
 kno::is_instance_of::Object::
 Object():kno::Object("is_instance_of")
 {
@@ -23,7 +25,7 @@ void kno_destroy(kno::Object* object_ptr)
 }
 
 extern "C"
-kno::Object* kno_query(kno::Object* object_ptr)
+kno::Plugin* kno_query(kno::Object* object_ptr)
 {
     kno::is_instance_of::Object* object [[maybe_unused]] =
         dynamic_cast<kno::is_instance_of::Object*>(object_ptr);
@@ -33,8 +35,9 @@ kno::Object* kno_query(kno::Object* object_ptr)
     }*/
 
     //TODO make boolean Object
+    kno::Plugin* plugin = kno_plugin_make("is_instance_of");
 
-    return nullptr;
+    return plugin;
 }
 
 bool
